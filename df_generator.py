@@ -11,3 +11,17 @@ def get_tables():
     URL = 'https://pt.wikipedia.org/wiki/Lista_de_faturamento_dos_clubes_de_futebol_brasileiro'
     tables_list = pd.read_html(URL)
     return tables_list
+
+def df_dict(tables: list) -> dict:
+    '''
+    Returns a dictionary where the key is the year and the value is
+    the corresponding dataframe.
+    ''''
+    df_dict = {}
+    tab_it = iter(tables)
+    for year in range(2019, 2006, -1):
+        df_dict[year] = next(tab_it)
+    return df_dict
+
+
+print(df_dict(get_tables()).keys())
