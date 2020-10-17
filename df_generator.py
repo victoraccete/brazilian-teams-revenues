@@ -1,3 +1,4 @@
+# This Python file uses the following encoding: utf-8
 '''
 Author: @victoraccete
 Please note that this script was made in 2020 to get data from 2007 to 2019.
