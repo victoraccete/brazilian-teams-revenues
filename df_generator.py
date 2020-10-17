@@ -6,6 +6,21 @@ The goal of this code is to generate a .csv with data from 2007 to 2019 to then
 make a EDA on this data.'''
 import pandas as pd
 
+GREAT_CLUBS = [
+        'Flamengo',
+        'Vasco',
+        'Fluminense',
+        'Botafogo',
+        'Grêmio',
+        'Internacional',
+        'Corinthians',
+        'Palmeiras',
+        'São Paulo',
+        'Santos',
+        'Cruzeiro',
+        'Atlético Mineiro'
+        ]
+
 def get_tables():
     URL = 'https://pt.wikipedia.org/wiki/Lista_de_faturamento_dos_clubes_de_futebol_brasileiro'
     tables_list = pd.read_html(URL)
@@ -22,11 +37,17 @@ def df_dict(tables: list) -> dict:
         df_dict[year] = next(tab_it)
     return df_dict
 
+def keep_greater_teams(tables: list) -> list:
+    for index in range(0, len(tables)):
+        df = tables[index]
+        tables[index] = df[df.Clube.isin(GREAT_CLUBS)]
+    return tables
 
 
 ############## Main block ##############
 def main():
-    print(df_dict(get_tables()).keys())
+    table = get_tables()
+    print(keep_greater_teams(table)[0])
 
 if __name__ == "__main__":
     main()
