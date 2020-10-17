@@ -6,7 +6,7 @@ The goal of this code is to generate a .csv with data from 2007 to 2019 to then
 make a EDA on this data.'''
 import pandas as pd
 
-GREAT_CLUBS = [
+GREAT_CLUBS = (
         'Flamengo',
         'Vasco',
         'Fluminense',
@@ -19,7 +19,7 @@ GREAT_CLUBS = [
         'Santos',
         'Cruzeiro',
         'Atlético Mineiro'
-        ]
+        )
 
 def get_tables():
     URL = 'https://pt.wikipedia.org/wiki/Lista_de_faturamento_dos_clubes_de_futebol_brasileiro'
@@ -43,11 +43,22 @@ def keep_greater_teams(tables: list) -> list:
         tables[index] = df[df.Clube.isin(GREAT_CLUBS)]
     return tables
 
+def include_years_to_df_list(tables: list) -> list:
+     def include_year(df, year):
+         '''adds a new column to the given df with a given year'''
+         df['Year'] = year
+         return df
+     # iterator used to help including years from 2019 to 2006 in descending order
+     year_it = iter([x for x in range (2019, 2006, -1)])
+     tables = [include_year(df, next(year_it)) for df in tables]
+
+     return tables
 
 ############## Main block ##############
 def main():
-    table = get_tables()
-    print(keep_greater_teams(table)[0])
+    tables = keep_greater_teams(get_tables())
+    tables = include_years_to_df_list(tables)
+    print(tables[0])
 
 if __name__ == "__main__":
     main()
