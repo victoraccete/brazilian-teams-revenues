@@ -46,7 +46,7 @@ def keep_greater_teams(tables: list) -> list:
 def include_years_to_df_list(tables: list) -> list:
      def include_year(df, year):
          '''adds a new column to the given df with a given year'''
-         df['Year'] = year
+         df['Ano'] = year
          return df
      # iterator used to help including years from 2019 to 2006 in descending order
      year_it = iter([x for x in range (2019, 2006, -1)])
