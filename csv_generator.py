@@ -50,7 +50,7 @@ def include_years_to_dfs(tables: list) -> list:
     return tables
 
 def export_df(df, filename='data.csv') -> None:
-    err_msg = 'Data should have 156 rows (12 clubs * 13 years), but it has {}'
+    err_msg = 'Data must have 156 rows (12 clubs * 13 years), but it has {}'
     assert df.shape[0] == 156, err_msg.format(df.shape[0])
     path = f'dataset/{filename}'
     df.to_csv(path)
