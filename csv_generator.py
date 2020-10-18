@@ -53,7 +53,7 @@ def export_df(df, filename='data.csv') -> None:
     err_msg = 'Data must have 156 rows (12 clubs * 13 years), but it has {}'
     assert df.shape[0] == 156, err_msg.format(df.shape[0])
     path = f'dataset/{filename}'
-    df.to_csv(path)
+    df.to_csv(path, index=False)
     return
 
 ############## Main block ##############
