@@ -1,13 +1,15 @@
 # This Python file uses the following encoding: utf-8
 """
 Author: @victoraccete
+
 Please note that this script was made in 2020 to get data from 2007 to 2019.
-It might not be maintained to keep up to date.
+It might not be maintained to keep up to date, and to use this code to get data
+from further years might need some adaption after the wikipedia page gets updated.
+
 The goal of this code is to generate a .csv with data from 2007 to 2019 to then
 make a EDA on this data.
 """
 import pandas as pd
-
 
 GREAT_CLUBS = (
     'Flamengo',
