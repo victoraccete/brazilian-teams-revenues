@@ -9,19 +9,19 @@ make a EDA on this data.
 import pandas as pd
 
 GREAT_CLUBS = (
-        'Flamengo',
-        'Vasco',
-        'Fluminense',
-        'Botafogo',
-        'Grêmio',
-        'Internacional',
-        'Corinthians',
-        'Palmeiras',
-        'São Paulo',
-        'Santos',
-        'Cruzeiro',
-        'Atlético Mineiro'
-        )
+    'Flamengo',
+    'Vasco',
+    'Fluminense',
+    'Botafogo',
+    'Grêmio',
+    'Internacional',
+    'Corinthians',
+    'Palmeiras',
+    'São Paulo',
+    'Santos',
+    'Cruzeiro',
+    'Atlético Mineiro'
+    )
 
 def get_tables():
     """From wikipedia"""
@@ -47,15 +47,19 @@ def keep_greater_teams(tables: list) -> list:
     return tables
 
 def include_years_to_dfs(tables: list) -> list:
-     def include_year(df, year):
-         """adds a new column to the given df with a given year"""
-         df['Ano'] = year
-         return df
-     # iterator used to help including years from 2019 to 2006 in descending order
-     year_it = iter([x for x in range (2019, 2006, -1)])
-     tables = [include_year(df, next(year_it)) for df in tables]
+    def include(df, year):
+        """adds a new column to the given df with a given year"""
+        df['Ano'] = year
+        return df
+    # iterator used to help including years from 2019 to 2006 in descending order
+    year_it = iter([x for x in range (2019, 2006, -1)])
+    tables = [include(df, next(year_it)) for df in tables]
 
-     return tables
+    return tables
+
+def merge_dfs(tables: list) -> pd.DataFrame:
+    pass
+
 
 ############## Main block ##############
 def main():
