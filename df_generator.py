@@ -8,6 +8,7 @@ make a EDA on this data.
 """
 import pandas as pd
 
+
 GREAT_CLUBS = (
     'Flamengo',
     'Vasco',
@@ -47,12 +48,20 @@ def include_years_to_dfs(tables: list) -> list:
 
     return tables
 
+def export_df(df, filename='data.csv') -> None:
+    err_msg = 'Data should have 156 rows (12 clubs * 13 years), but it has {}'
+    assert df.shape[0] == 156, err_msg.format(df.shape[0])
+    path = f'dataset/{filename}'
+    df.to_csv(path)
+    return
+
 ############## Main block ##############
 def main():
     tables = keep_greater_teams(get_tables()) # we only want the so-called 12 big
     tables = include_years_to_dfs(tables)
     df = pd.concat(tables)
-    print(df)
+    export_df(df, '2007-2019.csv')
+    #print(df)
 
 if __name__ == "__main__":
     main()
