@@ -29,17 +29,6 @@ def get_tables():
     tables_list = pd.read_html(URL)
     return tables_list
 
-def df_dict(tables: list) -> dict:
-    """
-    Returns a dictionary where the key is the year and the value is
-    the corresponding dataframe.
-    """
-    df_dict = {}
-    tab_it = iter(tables)
-    for year in range(2019, 2006, -1):
-        df_dict[year] = next(tab_it)
-    return df_dict
-
 def keep_greater_teams(tables: list) -> list:
     for index in range(0, len(tables)):
         df = tables[index]
@@ -51,21 +40,19 @@ def include_years_to_dfs(tables: list) -> list:
         """adds a new column to the given df with a given year"""
         df['Ano'] = year
         return df
-    # iterator used to help including years from 2019 to 2006 in descending order
+
+    # from 2019 to 2006 is the order found on wikipedia tables
     year_it = iter([x for x in range (2019, 2006, -1)])
     tables = [include(df, next(year_it)) for df in tables]
 
     return tables
 
-def merge_dfs(tables: list) -> pd.DataFrame:
-    pass
-
-
 ############## Main block ##############
 def main():
-    tables = keep_greater_teams(get_tables())
+    tables = keep_greater_teams(get_tables()) # we only want the so-called 12 big
     tables = include_years_to_dfs(tables)
-    print(tables[0])
+    df = pd.concat(tables)
+    print(df)
 
 if __name__ == "__main__":
     main()
