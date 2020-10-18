@@ -9,6 +9,7 @@ from further years might need some adaption after the wikipedia page gets update
 The goal of this code is to generate a .csv with data from 2007 to 2019 to then
 make a EDA on this data.
 """
+
 import pandas as pd
 
 GREAT_CLUBS = (
@@ -43,11 +44,9 @@ def include_years_to_dfs(tables: list) -> list:
         """adds a new column to the given df with a given year"""
         df['Ano'] = year
         return df
-
     # from 2019 to 2006 is the order found on wikipedia tables
     year_it = iter([x for x in range (2019, 2006, -1)])
     tables = [include(df, next(year_it)) for df in tables]
-
     return tables
 
 def export_df(df, filename='data.csv') -> None:
