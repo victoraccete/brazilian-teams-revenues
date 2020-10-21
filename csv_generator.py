@@ -27,7 +27,7 @@ GREAT_CLUBS = (
     'Atlético Mineiro'
     )
 
-def get_tables():
+def get_tables() -> list:
     """From wikipedia"""
     URL = 'https://pt.wikipedia.org/wiki/Lista_de_faturamento_dos_clubes_de_futebol_brasileiro'
     tables_list = pd.read_html(URL)
