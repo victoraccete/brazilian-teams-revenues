@@ -61,7 +61,7 @@ def main():
     tables = keep_greater_teams(get_tables()) # we only want the so-called 12 big
     tables = include_years_to_dfs(tables)
     df = pd.concat(tables)
-    export_df(df, '2007-2019.csv')
+    export_df(df, 'new_dataset.csv')
     #print(df)
 
 if __name__ == "__main__":
