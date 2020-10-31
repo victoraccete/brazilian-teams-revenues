@@ -9,3 +9,8 @@ Dados extraídos da [Wikipedia](https://pt.wikipedia.org/wiki/Lista_de_faturamen
 de 2007 a 2019.")
 st.markdown("Use a barra lateral para escolher opções de visualização.")
 st.sidebar.title("Opções de visualização")
+
+@st.cache(persist=True)
+def load_data() -> pd.DataFrame:
+    data = pd.read_csv('')
+    return data
