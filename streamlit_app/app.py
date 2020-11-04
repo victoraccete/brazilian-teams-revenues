@@ -28,13 +28,13 @@ def fix_currency_col(series):
 @st.cache(persist=True)
 def load_data() -> pd.DataFrame:
     data = pd.read_csv('../dataset/2007-2019.csv')
-    data.Ano = pd.to_datetime(data.Ano, format="%Y")
+    data['Ano'] = pd.to_datetime(data['Ano'], format="%Y")
     data = data.drop(columns=['Posição', 'Deficit ou Superavit'])
     data['Faturamento'] = fix_currency_col(data['Faturamento'])
     return data
 data = load_data()
 
-if st.sidebar.checkbox("Tabela", False): # this False defines the default value
+if st.sidebar.checkbox("Tabela", False): # this 'False' param defines the default value
     st.markdown("## Tabela:")
     st.write(data)
     pass
