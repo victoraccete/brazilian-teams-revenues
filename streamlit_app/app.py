@@ -6,8 +6,8 @@ import re
 
 st.title("Análise de faturamento dos clubes brasileiros")
 st.markdown("Apenas dados dos considerados '12 grandes'. \
-Dados extraídos da [Wikipedia](https://pt.wikipedia.org/wiki/Lista_de_faturamento_dos_clubes_de_futebol_brasileiro) \
-de 2007 a 2019.")
+Dados de 2007 a 2019 extraídos da \
+[Wikipedia](https://pt.wikipedia.org/wiki/Lista_de_faturamento_dos_clubes_de_futebol_brasileiro).")
 st.markdown("Use a barra lateral para escolher opções de visualização.")
 st.sidebar.title("Opções de visualização")
 
@@ -34,7 +34,17 @@ def load_data() -> pd.DataFrame:
     return data
 data = load_data()
 
+def subset_by_state(df: pd.DataFrame, states: list) -> pd.DataFrame:
+    df = df.loc[df['Estado'].isin(states)]
+    return df
+
 if st.sidebar.checkbox("Tabela", False): # this 'False' param defines the default value
     st.markdown("## Tabela:")
-    st.write(data)
+    states = ('Rio de Janeiro', 'São Paulo', 'Minas Gerais', 'Rio Grande do Sul')
+    state_choice = st.sidebar.multiselect('Filtrar por estados:', states)
+    if len(state_choice) > 0:
+        tmp_data = subset_by_state(data, state_choice).copy()
+        st.write(tmp_data)
+    else:
+        st.write(data)
     pass
