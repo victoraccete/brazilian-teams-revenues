@@ -43,7 +43,7 @@ if st.sidebar.checkbox("Tabela", False): # this 'False' param defines the defaul
     states = ('Rio de Janeiro', 'São Paulo', 'Minas Gerais', 'Rio Grande do Sul')
     state_choice = st.sidebar.multiselect('Filtrar por estados:', states)
     if len(state_choice) > 0:
-        tmp_data = subset_by_state(data, state_choice).copy()
+        tmp_data = subset_by_state(data, state_choice)
         st.write(tmp_data)
     else:
         st.write(data)
