@@ -4,7 +4,7 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import re
 
-st.title("Análise de faturamento dos clubes brasileiros")
+st.title("Faturamento dos clubes brasileiros")
 st.markdown("Apenas dados dos considerados '12 grandes'. \
 Dados de 2007 a 2019 extraídos da \
 [Wikipedia](https://pt.wikipedia.org/wiki/Lista_de_faturamento_dos_clubes_de_futebol_brasileiro).")
@@ -28,7 +28,7 @@ def fix_currency_col(series):
 @st.cache(persist=True)
 def load_data() -> pd.DataFrame:
     data = pd.read_csv('../dataset/2007-2019.csv')
-    data['Ano'] = pd.to_datetime(data['Ano'], format="%Y")
+    #data['Ano'] = pd.to_datetime(data['Ano'], format="%Y")
     data = data.drop(columns=['Posição', 'Deficit ou Superavit'])
     data['Faturamento'] = fix_currency_col(data['Faturamento'])
     return data
@@ -51,5 +51,16 @@ if st.sidebar.checkbox("Tabela", False): # this 'False' param defines the defaul
 
 if st.sidebar.checkbox("Gráfico de linha", True):
     st.markdown("## Gráfico:")
-    fig_revs = px.line(data, x="Ano", y="Faturamento", color='Clube')
+    fig_revs = px.line(data,
+                        x="Ano",
+                        y="Faturamento",
+                        color='Clube',
+                        title='Receitas dos 12 grandes',
+                        labels={
+                            'Faturamento': 'Faturamento (Milhões)'
+                            },
+                        template='plotly_white',
+                        )
+    fig_revs.update_xaxes(showgrid=False)
+    fig_revs.update_yaxes(showgrid=False)
     st.plotly_chart(fig_revs)
