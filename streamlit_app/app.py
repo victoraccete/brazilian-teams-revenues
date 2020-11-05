@@ -50,6 +50,20 @@ if st.sidebar.checkbox("Tabela", False): # this 'False' param defines the defaul
     pass
 
 if st.sidebar.checkbox("Gráfico de linha", True):
+    color_list = [
+            '#D62728', # Flamengo
+            '#52A24B', # Palmeiras
+            '#17BECF', # Grêmio
+            '#FB0D0D', # Internacional
+            '#101010', # Corinthians
+            '#BAB0AC', # Santos
+            '#E45756', # São Paulo
+            '#808080', # Atlético MG
+            '#1F77B4', # Cruzeiro
+            '#66AA00', # Fluminense
+            '#9D755D', # Vasco
+            '#303030', # Botafogo
+        ]
     st.markdown("## Gráfico:")
     fig_revs = px.line(data,
                         x="Ano",
@@ -60,6 +74,7 @@ if st.sidebar.checkbox("Gráfico de linha", True):
                             'Faturamento': 'Faturamento (Milhões)'
                             },
                         template='plotly_white',
+                        color_discrete_sequence=color_list,
                         )
     fig_revs.update_xaxes(showgrid=False)
     fig_revs.update_yaxes(showgrid=False)
