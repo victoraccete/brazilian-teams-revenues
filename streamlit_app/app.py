@@ -48,3 +48,8 @@ if st.sidebar.checkbox("Tabela", False): # this 'False' param defines the defaul
     else:
         st.write(data)
     pass
+
+if st.sidebar.checkbox("Gráfico de linha", True):
+    st.markdown("## Gráfico:")
+    fig_revs = px.line(data, x="Ano", y="Faturamento", color='Clube')
+    st.plotly_chart(fig_revs)
