@@ -45,20 +45,20 @@ def subset_by_column(df: pd.DataFrame, values: list, col: str) -> pd.DataFrame:
 if st.sidebar.checkbox("Tabela", False): # this 'False' param defines the default value
     st.markdown("## Tabela:")
 
-    tmp_data = data.copy()
+    modified_data = data.copy()
     # -------- STATE SELECTION -------- #
     states = ('Rio de Janeiro', 'São Paulo', 'Minas Gerais', 'Rio Grande do Sul')
     state_choice = st.sidebar.multiselect('Escolher estados:', states)
     if len(state_choice) > 0:
-        tmp_data = subset_by_column(data, state_choice, 'Estado')
+        modified_data = subset_by_column(data, state_choice, 'Estado')
 
     # -------- YEAR SELECTION -------- #
     years = [yr for yr in range(2007, 2020)]
     year_choice = st.sidebar.multiselect('Escolher anos:', years)
     if len(year_choice) > 0:
-        tmp_data = subset_by_column(data, year_choice, 'Ano')
+        modified_data = subset_by_column(data, year_choice, 'Ano')
 
-    st.write(tmp_data)
+    st.write(modified_data)
     pass
 
 if st.sidebar.checkbox("Gráfico de linha", True):
