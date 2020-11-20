@@ -34,19 +34,34 @@ def load_data() -> pd.DataFrame:
     return data
 data = load_data()
 
-def subset_by_state(df: pd.DataFrame, states: list) -> pd.DataFrame:
-    df = df.loc[df['Estado'].isin(states)]
+def subset_by_column(df: pd.DataFrame, values: list, col: str) -> pd.DataFrame:
+    """Receives as input a dataframe, a list of values to subset and the name
+    the column as a string. Then, for the given column, subset the df with the
+    values from within the list.
+    Returns the updated dataframe."""
+    df = df.loc[df[col].isin(values)]
     return df
 
 if st.sidebar.checkbox("Tabela", False): # this 'False' param defines the default value
     st.markdown("## Tabela:")
+
+    # -------- STATE SELECTION -------- #
     states = ('Rio de Janeiro', 'São Paulo', 'Minas Gerais', 'Rio Grande do Sul')
-    state_choice = st.sidebar.multiselect('Filtrar por estados:', states)
+    state_choice = st.sidebar.multiselect('Escolher estados:', states)
     if len(state_choice) > 0:
-        tmp_data = subset_by_state(data, state_choice)
-        st.write(tmp_data)
+        tmp_data = subset_by_column(data, state_choice, 'Estado')
     else:
-        st.write(data)
+        tmp_data = data
+
+    # -------- YEAR SELECTION -------- #
+    years = [yr for yr in range(2007, 2020)]
+    year_choice = st.sidebar.multiselect('Escolher anos:', years)
+    if len(year_choice) > 0:
+        tmp_data = subset_by_column(data, year_choice, 'Ano')
+    else:
+        tmp_data = data
+        
+    st.write(tmp_data)
     pass
 
 if st.sidebar.checkbox("Gráfico de linha", True):
@@ -79,3 +94,4 @@ if st.sidebar.checkbox("Gráfico de linha", True):
     fig_revs.update_xaxes(showgrid=False)
     fig_revs.update_yaxes(showgrid=False)
     st.plotly_chart(fig_revs)
+    pass
