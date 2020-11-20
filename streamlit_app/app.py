@@ -95,5 +95,3 @@ if st.sidebar.checkbox("Gráfico de linha", True):
     fig_revs.update_yaxes(showgrid=False)
     st.plotly_chart(fig_revs)
     pass
-
-# @TODO: sum of years bar plot
