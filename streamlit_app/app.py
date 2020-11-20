@@ -60,7 +60,7 @@ if st.sidebar.checkbox("Tabela", False): # this 'False' param defines the defaul
         tmp_data = subset_by_column(data, year_choice, 'Ano')
     else:
         tmp_data = data
-        
+
     st.write(tmp_data)
     pass
 
@@ -95,3 +95,5 @@ if st.sidebar.checkbox("Gráfico de linha", True):
     fig_revs.update_yaxes(showgrid=False)
     st.plotly_chart(fig_revs)
     pass
+
+# @TODO: sum of years bar plot
