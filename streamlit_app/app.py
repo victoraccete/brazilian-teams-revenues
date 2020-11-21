@@ -61,23 +61,9 @@ if st.sidebar.checkbox("Tabela", False): # this 'False' param defines the defaul
     st.write(modified_data)
     pass
 
-if st.sidebar.checkbox("Gráfico de linha", True):
-    color_list = [
-            '#D62728', # Flamengo
-            '#52A24B', # Palmeiras
-            '#17BECF', # Grêmio
-            '#FB0D0D', # Internacional
-            '#101010', # Corinthians
-            '#BAB0AC', # Santos
-            '#E45756', # São Paulo
-            '#808080', # Atlético MG
-            '#1F77B4', # Cruzeiro
-            '#66AA00', # Fluminense
-            '#9D755D', # Vasco
-            '#303030', # Botafogo
-        ]
-    st.markdown("## Gráfico:")
-    fig_revs = px.line(data,
+if st.sidebar.checkbox("Comparativo entre clubes", True):
+    st.markdown("## Comparativo entre clubes:")
+    clubs_line_plot = px.line(data,
                         x="Ano",
                         y="Faturamento",
                         color='Clube',
@@ -86,64 +72,99 @@ if st.sidebar.checkbox("Gráfico de linha", True):
                             'Faturamento': 'Faturamento (Milhões)'
                             },
                         template='plotly_white',
-                        color_discrete_sequence=color_list,
                         )
-    fig_revs.update_xaxes(showgrid=False)
-    fig_revs.update_yaxes(showgrid=False)
-    st.plotly_chart(fig_revs)
+    clubs_line_plot.update_xaxes(showgrid=False)
+    clubs_line_plot.update_yaxes(showgrid=False)
+    st.plotly_chart(clubs_line_plot)
+
+    club_sum_data = data.groupby(['Clube', 'Estado']).sum().drop(columns=['Ano']).reset_index()
+    clubs_bar_plot = px.bar(club_sum_data,
+                    x='Clube',
+                    y='Faturamento',
+                    color='Clube',
+                    title='Faturamento total no período 2007-2019',
+                    labels={
+                        'Faturamento': 'Faturamento (Milhões)'
+                        },
+                    template='plotly_white',
+                    )
+    clubs_bar_plot.update_xaxes(showgrid=False)
+    clubs_bar_plot.update_yaxes(showgrid=False)
+    st.plotly_chart(clubs_bar_plot)
     pass
 
 @st.cache(persist=True)
-def group_states(df: pd.DataFrame):
+def group_states(df: pd.DataFrame, group_years=True):
     """Returns two dataframes, grouped by states.
     The first is grouped by the sum, and the second by the mean."""
-    df_sum = df.groupby(['Estado']).sum().drop(columns=['Ano']).reset_index()
-    df_mean = df.groupby(['Estado']).mean().drop(columns=['Ano']).reset_index()
+    if group_years == True:
+        df_sum = df.groupby(['Estado']).sum().drop(columns=['Ano']).reset_index()
+        df_mean = df.groupby(['Estado']).mean().drop(columns=['Ano']).reset_index()
+    else:
+        df_sum = df.groupby(['Estado', 'Ano']).sum().reset_index()
+        df_mean = df.groupby(['Estado', 'Ano']).mean().reset_index()
     return df_sum, df_mean
 
-if st.sidebar.checkbox("Comparativo total por estado", False):
-    st.markdown("## Comparativo de todos os anos: ")
-    color_list = [
-            '#D62728', # Flamengo
-            '#52A24B', # Palmeiras
-            '#17BECF', # Grêmio
-            '#FB0D0D', # Internacional
-            '#101010', # Corinthians
-            '#BAB0AC', # Santos
-            '#E45756', # São Paulo
-            '#808080', # Atlético MG
-            '#1F77B4', # Cruzeiro
-            '#66AA00', # Fluminense
-            '#9D755D', # Vasco
-            '#303030', # Botafogo
-        ]
+if st.sidebar.checkbox("Comparativo entre estados", False):
+    st.markdown("## Comparativo entre estados")
+    df_sum, df_mean = group_states(data)
+    df_sum_years, df_mean_years = group_states(data, group_years=False)
     options = ('Média', 'Soma')
     bar_choice = st.radio("Forma de agrupamento", options)
-    df_sum, df_mean = group_states(data)
     if bar_choice == 'Média':
-        fig_bar = px.bar(df_mean,
+        states_line_plot = px.line(df_mean_years,
+                            x="Ano",
+                            y="Faturamento",
+                            color='Estado',
+                            title='Média incluindo os grandes clubes',
+                            labels={
+                                'Faturamento': 'Faturamento (Milhões)'
+                                },
+                            template='plotly_white',
+                            )
+        states_line_plot.update_xaxes(showgrid=False)
+        states_line_plot.update_yaxes(showgrid=False)
+        st.plotly_chart(states_line_plot)
+
+        states_bar_plot = px.bar(df_mean,
                         x='Estado',
                         y='Faturamento',
-                        title='Média de faturamento dos clubes de cada estado (2007-2019)',
+                        title='Média de faturamento incluindo os grandes clubes (2007-2019)',
                         labels={
                             'Faturamento': 'Faturamento (Milhões)'
                             },
                         template='plotly_white',
                         )
-        fig_bar.update_xaxes(showgrid=False)
-        fig_bar.update_yaxes(showgrid=False)
-        st.plotly_chart(fig_bar)
+        states_bar_plot.update_xaxes(showgrid=False)
+        states_bar_plot.update_yaxes(showgrid=False)
+        st.plotly_chart(states_bar_plot)
     else:
-        fig_bar = px.bar(df_sum,
+        states_line_plot = px.line(df_sum_years,
+                            x="Ano",
+                            y="Faturamento",
+                            color='Estado',
+                            title='Soma incluindo os grandes clubes',
+                            labels={
+                                'Faturamento': 'Faturamento (Milhões)'
+                                },
+                            template='plotly_white',
+                            )
+        states_line_plot.update_xaxes(showgrid=False)
+        states_line_plot.update_yaxes(showgrid=False)
+        st.plotly_chart(states_line_plot)
+
+        states_bar_plot = px.bar(df_sum,
                         x='Estado',
                         y='Faturamento',
-                        title='Soma de faturamento dos clubes de cada estado (2007-2019)',
+                        title='Soma de faturamento incluindo os grandes clubes (2007-2019)',
                         labels={
                             'Faturamento': 'Faturamento (Milhões)'
                             },
                         template='plotly_white',
                         )
-        fig_bar.update_xaxes(showgrid=False)
-        fig_bar.update_yaxes(showgrid=False)
-        st.plotly_chart(fig_bar)
+        states_bar_plot.update_xaxes(showgrid=False)
+        states_bar_plot.update_yaxes(showgrid=False)
+        st.plotly_chart(states_bar_plot)
+
+
     pass
