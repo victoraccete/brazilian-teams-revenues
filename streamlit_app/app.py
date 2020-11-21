@@ -92,3 +92,58 @@ if st.sidebar.checkbox("Gráfico de linha", True):
     fig_revs.update_yaxes(showgrid=False)
     st.plotly_chart(fig_revs)
     pass
+
+@st.cache(persist=True)
+def group_states(df: pd.DataFrame):
+    """Returns two dataframes, grouped by states.
+    The first is grouped by the sum, and the second by the mean."""
+    df_sum = df.groupby(['Estado']).sum().drop(columns=['Ano']).reset_index()
+    df_mean = df.groupby(['Estado']).mean().drop(columns=['Ano']).reset_index()
+    return df_sum, df_mean
+
+if st.sidebar.checkbox("Comparativo total por estado", False):
+    st.markdown("## Comparativo de todos os anos: ")
+    color_list = [
+            '#D62728', # Flamengo
+            '#52A24B', # Palmeiras
+            '#17BECF', # Grêmio
+            '#FB0D0D', # Internacional
+            '#101010', # Corinthians
+            '#BAB0AC', # Santos
+            '#E45756', # São Paulo
+            '#808080', # Atlético MG
+            '#1F77B4', # Cruzeiro
+            '#66AA00', # Fluminense
+            '#9D755D', # Vasco
+            '#303030', # Botafogo
+        ]
+    options = ('Média', 'Soma')
+    bar_choice = st.radio("Forma de agrupamento", options)
+    df_sum, df_mean = group_states(data)
+    if bar_choice == 'Média':
+        fig_bar = px.bar(df_mean,
+                        x='Estado',
+                        y='Faturamento',
+                        title='Média de faturamento dos clubes de cada estado (2007-2019)',
+                        labels={
+                            'Faturamento': 'Faturamento (Milhões)'
+                            },
+                        template='plotly_white',
+                        )
+        fig_bar.update_xaxes(showgrid=False)
+        fig_bar.update_yaxes(showgrid=False)
+        st.plotly_chart(fig_bar)
+    else:
+        fig_bar = px.bar(df_sum,
+                        x='Estado',
+                        y='Faturamento',
+                        title='Soma de faturamento dos clubes de cada estado (2007-2019)',
+                        labels={
+                            'Faturamento': 'Faturamento (Milhões)'
+                            },
+                        template='plotly_white',
+                        )
+        fig_bar.update_xaxes(showgrid=False)
+        fig_bar.update_yaxes(showgrid=False)
+        st.plotly_chart(fig_bar)
+    pass
