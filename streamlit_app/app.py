@@ -28,11 +28,22 @@ def fix_currency_col(series):
 @st.cache(persist=True)
 def load_data() -> pd.DataFrame:
     data = pd.read_csv('../dataset/2007-2019.csv')
-    #data['Ano'] = pd.to_datetime(data['Ano'], format="%Y")
     data = data.drop(columns=['Posição', 'Deficit ou Superavit'])
     data['Faturamento'] = fix_currency_col(data['Faturamento'])
     return data
 data = load_data()
+
+@st.cache(persist=True)
+def group_states(df: pd.DataFrame, group_years=True):
+    """Returns two dataframes, grouped by states.
+    The first is grouped by the sum, and the second by the mean."""
+    if group_years == True:
+        df_sum = df.groupby(['Estado']).sum().drop(columns=['Ano']).reset_index()
+        df_mean = df.groupby(['Estado']).mean().drop(columns=['Ano']).reset_index()
+    else:
+        df_sum = df.groupby(['Estado', 'Ano']).sum().reset_index()
+        df_mean = df.groupby(['Estado', 'Ano']).mean().reset_index()
+    return df_sum, df_mean
 
 def subset_by_column(df: pd.DataFrame, values: list, col: str) -> pd.DataFrame:
     """Receives as input a dataframe, a list of values to subset and the name
@@ -50,13 +61,23 @@ if st.sidebar.checkbox("Tabela", False): # this 'False' param defines the defaul
     states = ('Rio de Janeiro', 'São Paulo', 'Minas Gerais', 'Rio Grande do Sul')
     state_choice = st.sidebar.multiselect('Escolher estados:', states)
     if len(state_choice) > 0:
+        '''We use this > 0 to see if the user really selected something.
+        If he didn't. Then we'll do nothing to the dataset and keep it full.
+        '''
         modified_data = subset_by_column(data, state_choice, 'Estado')
+    else:
+        pass
 
     # -------- YEAR SELECTION -------- #
     years = [yr for yr in range(2007, 2020)]
     year_choice = st.sidebar.multiselect('Escolher anos:', years)
     if len(year_choice) > 0:
+        '''We use this > 0 to see if the user really selected something.
+        If he didn't. Then we'll do nothing to the dataset and keep it full.
+        '''
         modified_data = subset_by_column(data, year_choice, 'Ano')
+    else:
+        pass
 
     st.write(modified_data)
     pass
@@ -92,18 +113,6 @@ if st.sidebar.checkbox("Comparativo entre clubes", True):
     clubs_bar_plot.update_yaxes(showgrid=False)
     st.plotly_chart(clubs_bar_plot)
     pass
-
-@st.cache(persist=True)
-def group_states(df: pd.DataFrame, group_years=True):
-    """Returns two dataframes, grouped by states.
-    The first is grouped by the sum, and the second by the mean."""
-    if group_years == True:
-        df_sum = df.groupby(['Estado']).sum().drop(columns=['Ano']).reset_index()
-        df_mean = df.groupby(['Estado']).mean().drop(columns=['Ano']).reset_index()
-    else:
-        df_sum = df.groupby(['Estado', 'Ano']).sum().reset_index()
-        df_mean = df.groupby(['Estado', 'Ano']).mean().reset_index()
-    return df_sum, df_mean
 
 if st.sidebar.checkbox("Comparativo entre estados", False):
     st.markdown("## Comparativo entre estados")
@@ -165,6 +174,5 @@ if st.sidebar.checkbox("Comparativo entre estados", False):
         states_bar_plot.update_xaxes(showgrid=False)
         states_bar_plot.update_yaxes(showgrid=False)
         st.plotly_chart(states_bar_plot)
-
-
+        
     pass
