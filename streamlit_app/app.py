@@ -109,9 +109,9 @@ if st.sidebar.checkbox("Comparativo entre estados", False):
     st.markdown("## Comparativo entre estados")
     df_sum, df_mean = group_states(data)
     df_sum_years, df_mean_years = group_states(data, group_years=False)
-    options = ('Média', 'Soma')
+    options = ('Média dos clubes', 'Soma')
     bar_choice = st.radio("Forma de agrupamento", options)
-    if bar_choice == 'Média':
+    if bar_choice == 'Média dos clubes':
         states_line_plot = px.line(df_mean_years,
                             x="Ano",
                             y="Faturamento",
