@@ -27,7 +27,7 @@ def fix_currency_col(series):
 
 @st.cache(persist=True)
 def load_data() -> pd.DataFrame:
-    data = pd.read_csv('dataset/2007-2019.csv')
+    data = pd.read_csv('2007-2019.csv')
     data = data.drop(columns=['Posição', 'Deficit ou Superavit'])
     data['Faturamento'] = fix_currency_col(data['Faturamento'])
     return data
