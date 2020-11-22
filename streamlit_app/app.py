@@ -61,9 +61,8 @@ if st.sidebar.checkbox("Tabela", False): # this 'False' param defines the defaul
     states = ('Rio de Janeiro', 'São Paulo', 'Minas Gerais', 'Rio Grande do Sul')
     state_choice = st.sidebar.multiselect('Escolher estados:', states)
     if len(state_choice) > 0:
-        '''We use this > 0 to see if the user really selected something.
-        If he didn't. Then we'll do nothing to the dataset and keep it full.
-        '''
+        # We use this > 0 to see if the user really selected something.
+        # If the user didn't. Then we'll do nothing to the dataset and keep it full.
         modified_data = subset_by_column(data, state_choice, 'Estado')
     else:
         pass
@@ -72,9 +71,8 @@ if st.sidebar.checkbox("Tabela", False): # this 'False' param defines the defaul
     years = [yr for yr in range(2007, 2020)]
     year_choice = st.sidebar.multiselect('Escolher anos:', years)
     if len(year_choice) > 0:
-        '''We use this > 0 to see if the user really selected something.
-        If he didn't. Then we'll do nothing to the dataset and keep it full.
-        '''
+        # We use this > 0 to see if the user really selected something.
+        # If the user didn't. Then we'll do nothing to the dataset and keep it full.
         modified_data = subset_by_column(data, year_choice, 'Ano')
     else:
         pass
@@ -174,5 +172,5 @@ if st.sidebar.checkbox("Comparativo entre estados", False):
         states_bar_plot.update_xaxes(showgrid=False)
         states_bar_plot.update_yaxes(showgrid=False)
         st.plotly_chart(states_bar_plot)
-        
+
     pass
